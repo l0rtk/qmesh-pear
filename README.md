@@ -37,7 +37,7 @@ pear run pear://4dfwqfqmm7absua31rez3mq3whhpg4zkfhkf7qruyms8hrbhhejo
 
 ```bash
 # Clone repository
-git clone <your-repo-url>
+git clone https://github.com/l0rtk/qmesh-pear
 cd qmesh-pear
 
 # Download cross-platform binaries (one-time)
