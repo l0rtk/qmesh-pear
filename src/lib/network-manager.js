@@ -128,6 +128,12 @@ export class NetworkManager extends EventEmitter {
       bytesRead: 0        // Bytes read so far
     })
 
+    // Add connection to all active topics
+    // (In single-topic apps, this is fine. Multi-topic would need topic filtering)
+    for (const topic of this.topics.values()) {
+      topic.connections.add(conn)
+    }
+
     // Emit peer-connected event
     this.emit('peer-connected', peerId, conn, info)
 
