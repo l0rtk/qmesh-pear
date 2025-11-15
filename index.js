@@ -1,57 +1,129 @@
 #!/usr/bin/env pear
 
 /**
- * QMesh Worker - Pear Runtime Entry Point
+ * QMesh Worker - Production Entry Point
  *
  * Distributed P2P LLM Inference Network
- * Running on Bare JavaScript Runtime via Pear
+ * Running on Pear Runtime (Bare JavaScript)
+ *
+ * Usage:
+ *   pear run qmesh-worker
+ *   pear run --dev .
  */
 
-// Import Bare-compatible process module via import map
+import 'bare-node-runtime/global'
 import process from '#process'
+import { WorkerNode } from './src/worker/worker-node.js'
+import { getBinaryPath } from './src/lib/binary-resolver.js'
+import { ensureModel } from './src/lib/model-downloader.js'
 
-console.log('🍐 QMesh Worker starting on Pear Runtime...')
-console.log('Runtime:', typeof Pear !== 'undefined' ? 'Bare (Pear)' : 'Node.js')
+console.log('\n🌐 QMesh P2P Worker\n')
+console.log('='.repeat(60))
 
-// Pear-specific teardown hook
+// Pear teardown hook
 if (typeof Pear !== 'undefined') {
   Pear.teardown(() => {
-    console.log('👋 QMesh Worker shutting down...')
+    console.log('\n⚠️  Shutting down worker...')
   })
 }
 
-// Test basic functionality
+let worker = null
+
 async function main() {
   try {
-    console.log('\n📋 System Information:')
-    console.log('  Platform:', process.platform)
-    console.log('  Architecture:', process.arch)
-    console.log('  Node/Bare version:', process.version)
+    // Production configuration
+    console.log('\n📋 Worker Configuration:\n')
 
-    if (typeof Pear !== 'undefined') {
-      console.log('  Pear config:', Pear.config)
+    const config = {
+      // Model and inference
+      modelPath: './models/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf',
+      binaryPath: getBinaryPath(),
+      port: 8080,
+      gpuLayers: 0,  // CPU only (change to 33 for GPU)
+      threads: 4,
+      temperature: 0.7,
+      maxTokens: 200,
+
+      // P2P network
+      networkTopic: 'qmesh-inference',
+
+      // Queue and health
+      queueCapacity: 10,
+      statusBroadcastInterval: 10000, // 10 seconds
+
+      verbose: false
     }
 
-    console.log('\n✅ Basic setup complete!')
-    console.log('\n📦 Next steps:')
-    console.log('  1. Copy source files from qmesh/')
-    console.log('  2. Install dependencies')
-    console.log('  3. Test node-llama-cpp compatibility')
-    console.log('  4. Port modules to use Bare imports')
+    console.log(`  Model: ${config.modelPath}`)
+    console.log(`  Binary: ${config.binaryPath}`)
+    console.log(`  Network Topic: ${config.networkTopic}`)
+    console.log(`  Queue Capacity: ${config.queueCapacity}`)
+    console.log('='.repeat(60))
+
+    // Ensure model is available
+    console.log('\n📦 Checking model availability...\n')
+    await ensureModel(config.modelPath, { autoDownload: false })
+
+    // Create worker
+    console.log('\n⚙️  Initializing worker node...\n')
+
+    worker = new WorkerNode(config)
+
+    // Event handlers
+    worker.on('ready', ({ workerId, health }) => {
+      console.log('\n' + '='.repeat(60))
+      console.log('\n🟢 Worker Ready!\n')
+      console.log(`  Worker ID: ${workerId}`)
+      console.log(`  Health: ${health.score} (${health.state})`)
+      console.log('\n' + '='.repeat(60))
+      console.log('\n📡 Listening for P2P requests...\n')
+      console.log('Press Ctrl+C to exit\n')
+    })
+
+    worker.on('request-accepted', (peerId, requestId) => {
+      console.log(`\n📥 Request accepted: ${requestId}`)
+    })
+
+    worker.on('request-completed', (peerId, requestId, stats) => {
+      console.log(`✅ Request completed: ${requestId} (${stats.tokens} tokens, ${(stats.duration / 1000).toFixed(2)}s)`)
+    })
+
+    worker.on('error', (error) => {
+      console.error(`\n❌ Worker error:`, error.message)
+    })
+
+    // Start worker
+    await worker.start()
 
   } catch (error) {
-    console.error('❌ Error:', error.message)
+    console.error('\n❌ Worker failed:', error.message)
+    console.error('\nStack trace:')
     console.error(error.stack)
+
+    await cleanup()
     process.exit(1)
   }
 }
 
-// Check if running as main module
-if (import.meta.url === `file://${process.argv[1]}` || typeof Pear !== 'undefined') {
-  main().catch(error => {
-    console.error('Fatal error:', error)
-    process.exit(1)
-  })
+async function cleanup() {
+  if (worker) {
+    console.log('\n🧹 Cleaning up...')
+    await worker.stop()
+    console.log('✅ Shutdown complete')
+  }
 }
 
-export { main }
+// Graceful shutdown handlers
+process.on('SIGINT', async () => {
+  console.log('\n\n⚠️  Shutting down worker...')
+  await cleanup()
+  process.exit(0)
+})
+
+process.on('SIGTERM', async () => {
+  console.log('\n\n⚠️  Shutting down worker...')
+  await cleanup()
+  process.exit(0)
+})
+
+main()

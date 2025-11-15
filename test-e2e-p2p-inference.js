@@ -20,6 +20,7 @@ import 'bare-node-runtime/global'
 import process from '#process'
 import { WorkerNode } from './src/worker/worker-node.js'
 import { QMeshClient } from './src/client/qmesh-client.js'
+import { getBinaryPath } from './src/lib/binary-resolver.js'
 
 console.log('\n🌐 End-to-End P2P Inference Test\n')
 console.log('='.repeat(60))
@@ -35,7 +36,7 @@ async function main() {
 
     const config = {
       modelPath: './models/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf',
-      binaryPath: '/home/luka/llama.cpp/build/bin/llama-server',
+      binaryPath: getBinaryPath(),
       port: 8080,
       gpuLayers: 0,
       threads: 4,
