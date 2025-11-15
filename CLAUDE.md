@@ -6,7 +6,7 @@ This file provides guidance to Claude Code when working with the QMesh Pear Runt
 
 **QMesh Pear** is a Pear Runtime port of QMesh - a distributed peer-to-peer LLM inference network. This version uses a **sidecar architecture** with llama-server subprocess instead of direct node-llama-cpp bindings.
 
-**Current Status:** Phase 1 Complete (Local Sidecar) - Phase 2 Starting (P2P Networking)
+**Current Status:** ✅ Phase 2 Complete (P2P Networking) - Ready for Phase 3 (Distribution)
 
 ## Core Architecture: Sidecar Pattern
 
@@ -112,6 +112,116 @@ const result = await engine.generate('Hello!', { maxTokens: 50 })
 await engine.dispose()
 ```
 
+### 4. NetworkManager ([src/lib/network-manager.js](src/lib/network-manager.js))
+
+P2P networking layer wrapping Hyperswarm with length-prefixed message protocol.
+
+**Key methods:**
+```javascript
+const manager = new NetworkManager()
+
+// Join P2P network
+const topicKey = await manager.joinNetwork('qmesh-inference')
+
+// Send to specific peer
+manager.sendMessage(peerId, { type: 'prompt', data: '...' })
+
+// Broadcast to all peers
+manager.broadcast({ type: 'status', health: { ... } })
+
+// Clean shutdown
+await manager.destroy()
+```
+
+**Features:**
+- Length-prefixed JSON protocol (4-byte big-endian + JSON)
+- Event-based (peer-connected, peer-disconnected, message)
+- Handles split TCP packets correctly
+- Multi-topic support
+
+### 5. SystemMonitor ([src/lib/system-monitor.js](src/lib/system-monitor.js))
+
+Health tracking and load management with Bare-compatible fallbacks.
+
+**Key methods:**
+```javascript
+const monitor = new SystemMonitor({ queueCapacity: 10 })
+
+// Start monitoring
+monitor.startMonitoring(5000) // Update every 5 seconds
+
+// Get health status
+const health = monitor.getHealth()
+// { score: 85, state: 'healthy', cpu: 15, memory: 20, queue: { size: 2, capacity: 10 } }
+
+// Update queue
+monitor.incrementQueue()
+monitor.decrementQueue()
+```
+
+**Health Score:**
+```javascript
+score = (100 - cpuUsage) * 0.4 + (100 - memoryUsage) * 0.4 + queueAvailability * 0.2
+```
+
+**States:**
+- 🟢 Healthy (score > 60): Accept requests
+- 🟡 Busy (score 20-60): Accept but slower
+- 🔴 Overloaded (score < 20): Reject requests
+
+### 6. WorkerNode ([src/worker/worker-node.js](src/worker/worker-node.js))
+
+Worker orchestrator integrating inference, networking, and health monitoring.
+
+**Usage:**
+```javascript
+const worker = new WorkerNode({
+  modelPath: './models/model.gguf',
+  binaryPath: '/path/to/llama-server',
+  port: 8080,
+  networkTopic: 'qmesh-inference',
+  queueCapacity: 10
+})
+
+await worker.start()
+// Worker now accepts P2P inference requests
+```
+
+**Message types handled:**
+- `prompt` - Inference request from client
+- `status_request` - Health status query
+
+**Message types sent:**
+- `status` - Availability broadcast (every 10 seconds)
+- `inference_result` - Response with generated text
+- `inference_error` - Error message
+
+### 7. QMeshClient ([src/client/qmesh-client.js](src/client/qmesh-client.js))
+
+Client SDK for distributed LLM inference.
+
+**Usage:**
+```javascript
+const client = new QMeshClient({ networkTopic: 'qmesh-inference' })
+
+await client.connect()
+await client.discoverWorkers() // Wait for discovery
+
+const result = await client.generate('Tell me a joke', {
+  maxTokens: 100,
+  temperature: 0.7
+})
+
+console.log(result.text)
+await client.disconnect()
+```
+
+**Features:**
+- Automatic worker discovery via status broadcasts
+- Health-based worker selection (picks highest health score)
+- Request timeout handling
+- Event-based progress tracking
+
 ## Bare Runtime Compatibility
 
 ### Critical Differences from Node.js
@@ -162,16 +272,52 @@ import fs from '#fs'
 
 Pre-compiled packages (like `node-llama-cpp`) with hardcoded `import 'os'` won't work in Bare Runtime. This is why we use the sidecar pattern.
 
+**4. Missing os.cpus(), os.totalmem(), os.freemem()**
+
+`bare-os` doesn't provide the same APIs as Node.js `os` module. Use graceful fallbacks:
+
+```javascript
+// Check if Node.js APIs are available
+if (typeof os.totalmem === 'function') {
+  const totalMem = os.totalmem()
+  const freeMem = os.freemem()
+  // Use system-wide memory info
+}
+
+// Bare Runtime fallback
+if (typeof os.resourceUsage === 'function') {
+  const usage = os.resourceUsage()
+  const processMemMB = usage.maxRSS / 1024 // KB to MB
+  // Use process memory as proxy
+}
+```
+
+**Available in bare-os:**
+- `platform()`, `arch()`, `resourceUsage()`
+- No: `cpus()`, `totalmem()`, `freemem()`, `uptime()`, `loadavg()`
+
+**Solution:** Implement graceful fallbacks that work in both environments. See [SystemMonitor](src/lib/system-monitor.js) for complete implementation.
+
 ## Development Commands
 
 ```bash
-# Run examples
+# Phase 1: Local Inference Examples
 pear run --dev examples/inference/run-worker.js
 pear run --dev examples/inference/simple-test.js
 
-# Run tests
-pear run --dev test-sidecar.js
-pear run --dev test-inference-engine-sidecar.js
+# Phase 2: P2P Networking Examples
+pear run --dev examples/p2p/run-p2p-worker.js  # Start worker
+pear run --dev examples/p2p/run-p2p-client.js  # Start client (in separate terminal)
+
+# Unit Tests
+pear run --dev test-sidecar.js                      # Sidecar architecture
+pear run --dev test-inference-engine-sidecar.js     # Inference engine
+pear run --dev test-network-manager.js              # P2P networking
+pear run --dev test-system-monitor.js               # Health monitoring
+
+# End-to-End Tests
+pear run --dev test-e2e-p2p-inference.js            # Single process (limited)
+bash test-e2e-separate-processes.sh                 # Separate processes (recommended)
 
 # Build llama-server (CPU-only)
 cd /home/luka/llama.cpp
@@ -198,23 +344,31 @@ qmesh-pear/
 │
 ├── src/
 │   ├── worker/
-│   │   └── inference-engine-sidecar.js  # ✅ API-compatible adapter
-│   ├── client/                          # (to be implemented)
-│   │   └── qmesh-client.js
+│   │   ├── inference-engine-sidecar.js  # ✅ API-compatible adapter
+│   │   └── worker-node.js               # ✅ P2P worker orchestrator
+│   ├── client/
+│   │   └── qmesh-client.js              # ✅ Client SDK for P2P inference
 │   └── lib/
 │       ├── llama-process-manager.js     # ✅ Subprocess manager
 │       ├── llama-http-client.js         # ✅ HTTP client
-│       ├── network-manager.js           # ⏳ TODO: Hyperswarm wrapper
-│       └── system-monitor.js            # ⏳ TODO: Health monitoring
+│       ├── network-manager.js           # ✅ Hyperswarm P2P wrapper
+│       └── system-monitor.js            # ✅ Health monitoring
 │
 ├── examples/
-│   └── inference/
-│       ├── run-worker.js                # ✅ Worker startup example
-│       └── simple-test.js               # ✅ Quick test
+│   ├── inference/
+│   │   ├── run-worker.js                # ✅ Local worker example
+│   │   └── simple-test.js               # ✅ Quick test
+│   └── p2p/
+│       ├── run-p2p-worker.js            # ✅ P2P worker example
+│       └── run-p2p-client.js            # ✅ P2P client example
 │
 ├── test-sidecar.js                      # ✅ E2E sidecar test
 ├── test-inference-engine-sidecar.js     # ✅ Adapter test
-├── test-llama-compatibility.js          # Failed compatibility test
+├── test-network-manager.js              # ✅ P2P networking test
+├── test-system-monitor.js               # ✅ Health monitoring test
+├── test-e2e-p2p-inference.js            # ✅ End-to-end P2P test
+├── test-e2e-separate-processes.sh       # ✅ Multi-process E2E test
+├── PHASE2_COMPLETE.md                   # Phase 2 summary
 └── models/                              # GGUF models (not in git)
     ├── tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf
     └── Llama-3.2-3B-Instruct-Q4_K_M.gguf
@@ -229,9 +383,11 @@ qmesh-pear/
 | Metric | Value |
 |--------|-------|
 | Model load time | 2-3 seconds |
-| Inference speed | 56 tokens/sec |
-| Memory usage | ~1.5GB |
+| Inference speed | 25-56 tokens/sec |
+| Memory usage | ~1.5GB (llama-server) + ~52MB (Pear app) |
 | HTTP overhead | <1ms (negligible) |
+| P2P discovery | 1-3 seconds |
+| P2P latency | <50ms for routing |
 
 ### Expected Performance (with GPU)
 
@@ -261,14 +417,34 @@ qmesh-pear/
 - `examples/inference/simple-test.js`
 - `ARCHITECTURE.md`, `STATUS.md`, `DAY1_SUMMARY.md`
 
-### ⏳ Phase 2: P2P Networking (Week 2) - **IN PROGRESS**
+### ✅ Phase 2: P2P Networking (Week 2) - **COMPLETE**
 
-Next tasks:
-1. Create `src/lib/network-manager.js` - Hyperswarm wrapper
-2. Create `src/lib/system-monitor.js` - CPU/memory/health tracking
-3. Create `src/worker/worker-node.js` - P2P orchestrator
-4. Create `src/client/qmesh-client.js` - Client SDK
-5. Test multi-worker discovery
+- [x] NetworkManager - Hyperswarm P2P wrapper with length-prefixed protocol
+- [x] SystemMonitor - Health tracking with Bare-compatible fallbacks
+- [x] WorkerNode - P2P worker orchestrator
+- [x] QMeshClient - Client SDK for distributed inference
+- [x] Multi-worker discovery and selection
+- [x] End-to-end P2P inference working
+- [x] Unit tests passing (NetworkManager, SystemMonitor)
+- [x] Integration tests passing (E2E P2P inference)
+
+**Files Created:**
+- `src/lib/network-manager.js` (386 lines)
+- `src/lib/system-monitor.js` (360 lines)
+- `src/worker/worker-node.js` (425 lines)
+- `src/client/qmesh-client.js` (396 lines)
+- `examples/p2p/run-p2p-worker.js` (202 lines)
+- `examples/p2p/run-p2p-client.js` (215 lines)
+- `test-network-manager.js`, `test-system-monitor.js`
+- `test-e2e-p2p-inference.js`, `test-e2e-separate-processes.sh`
+- `PHASE2_COMPLETE.md`
+
+**Key Achievements:**
+- ✅ Full P2P networking layer working
+- ✅ Health-based worker selection
+- ✅ Length-prefixed message protocol
+- ✅ Concurrent request handling
+- ✅ Bare Runtime compatibility solved (CPU/memory monitoring)
 
 ### 📅 Phase 3: Distribution (Week 3-4) - **PENDING**
 
@@ -378,37 +554,46 @@ _createTimeoutSignal(timeoutMs) {
 - Easy to test (drop-in replacement)
 - Familiar patterns for developers
 
-## Next Steps (Phase 2)
+## Next Steps (Phase 3)
 
-### Immediate Tasks
+### Immediate Tasks (Distribution)
 
-1. **Implement network-manager.js**
-   - Wrap Hyperswarm for P2P connectivity
-   - Handle peer discovery and connections
-   - Message protocol (length-prefixed JSON)
+1. **Bundle llama-server binary**
+   - Include binary in Pear app staging
+   - Handle platform-specific binaries (Linux/macOS/Windows)
+   - Test binary extraction and execution
 
-2. **Implement system-monitor.js**
-   - CPU usage tracking
-   - Memory monitoring
-   - Health score calculation
+2. **Pear staging and seeding**
+   - Configure `pear.json` for production
+   - Stage app with `pear stage --channel main`
+   - Seed to DHT network
 
-3. **Implement worker-node.js**
-   - Combine inference + networking
-   - Handle incoming requests
-   - Broadcast availability
+3. **Multi-machine testing**
+   - Deploy to different machines
+   - Test cross-machine P2P discovery
+   - Validate NAT traversal
 
-4. **Test P2P networking**
-   - Start 2-3 workers locally
-   - Verify discovery works
-   - Test request routing
+4. **Auto-update testing**
+   - Push app updates
+   - Verify auto-update mechanism
+   - Test rollback scenarios
+
+### Immediate Improvements
+
+- **Streaming responses** - Add streaming support to QMeshClient
+- **Better error handling** - More detailed error messages and recovery
+- **Multi-worker load balancing** - Test with 3-5 workers simultaneously
+- **Model auto-download** - Download models on first run if missing
 
 ### Future Enhancements
 
-- GPU support (requires CUDA toolkit)
-- Model distribution via Hyperdrive
-- Multi-model support
-- Mobile builds (Android/iOS)
-- Production hardening
+- **GPU support** (requires CUDA toolkit)
+- **Model distribution** via Hyperdrive
+- **Multi-model support** (1B, 3B, 7B models)
+- **Advanced worker selection** (consider latency, reputation, capabilities)
+- **Web client** (WebSocket support for browsers)
+- **Mobile builds** (Android/iOS)
+- **Production hardening** (rate limiting, authentication, monitoring)
 
 ## Resources
 
@@ -499,6 +684,8 @@ DEBUG=* pear run --dev test-sidecar.js
 
 ---
 
-**Status:** Phase 1 Complete (100%) - Ready for Phase 2!
+**Status:** ✅ Phase 2 Complete (100%) - Ready for Phase 3!
 **Last Updated:** November 15, 2025
-**Next Milestone:** P2P Networking Implementation
+**Next Milestone:** Distribution & Deployment
+
+See [PHASE2_COMPLETE.md](PHASE2_COMPLETE.md) for detailed Phase 2 summary.
