@@ -7,8 +7,18 @@
   "pear": {
     "name": "qmesh-worker",
     "type": "terminal",
-    "stage": [],
-    "links": {}
+    "stage": [
+      "index.js",
+      "src/**/*",
+      "bin/**/*",
+      "examples/**/*",
+      "package.json",
+      "README.md",
+      "PHASE2_COMPLETE.md"
+    ],
+    "links": {
+      "blocks": []
+    }
   },
   "imports": {
     "#fs": {
