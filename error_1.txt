@@ -1,0 +1,593 @@
+➜  ~ pear run pear://4dfwqfqmm7absua31rez3mq3whhpg4zkfhkf7qruyms8hrbhhejo
+
+:globe_with_meridians: QMesh P2P Worker
+
+============================================================
+
+:clipboard: Worker Configuration:
+
+DEBUG Pear.config: {
+  "id": "0@44af407b46b78fc4c760ea87b7b06054",
+  "key": {
+    "0": 208,
+    "1": 203,
+    "2": 71,
+    "3": 21,
+    "4": 203,
+    "5": 95,
+    "6": 112,
+    "7": 27,
+    "8": 79,
+    "9": 25,
+    "10": 145,
+    "11": 17,
+    "12": 124,
+    "13": 173,
+    "14": 217,
+    "15": 167,
+    "16": 56,
+    "17": 211,
+    "18": 106,
+    "19": 234,
+    "20": 47,
+    "21": 20,
+    "22": 94,
+    "23": 184,
+    "24": 147,
+    "25": 2,
+    "26": 236,
+    "27": 126,
+    "28": 16,
+    "29": 60,
+    "30": 226,
+    "31": 19
+  },
+  "links": {
+    "blocks": []
+  },
+  "alias": null,
+  "env": {
+    "SYSTEMD_EXEC_PID": "6614",
+    "SSH_AUTH_SOCK": "/run/user/1000/keyring/ssh",
+    "SESSION_MANAGER": "local/luka:@/tmp/.ICE-unix/6172,unix/luka:/tmp/.ICE-unix/6172",
+    "GNOME_TERMINAL_SCREEN": "/org/gnome/Terminal/screen/e47e2326_264d_4846_a608_43a40bbe6760",
+    "LANG": "en_US.UTF-8",
+    "XDG_CURRENT_DESKTOP": "ubuntu:GNOME",
+    "HOME": "/home/luka",
+    "LC_IDENTIFICATION": "ka_GE.UTF-8",
+    "XMODIFIERS": "@im=ibus",
+    "XDG_SESSION_CLASS": "user",
+    "COLORTERM": "truecolor",
+    "LIBVIRT_DEFAULT_URI": "qemu:///system",
+    "GPG_AGENT_INFO": "/run/user/1000/gnupg/S.gpg-agent:0:1",
+    "DESKTOP_SESSION": "ubuntu",
+    "QT_IM_MODULE": "ibus",
+    "XDG_MENU_PREFIX": "gnome-",
+    "USER": "luka",
+    "PWD": "/home/luka",
+    "LC_MEASUREMENT": "ka_GE.UTF-8",
+    "DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1000/bus",
+    "LC_NUMERIC": "ka_GE.UTF-8",
+    "GTK_MODULES": "gail:atk-bridge",
+    "XDG_CONFIG_DIRS": "/etc/xdg/xdg-ubuntu:/etc/xdg",
+    "WINDOWPATH": "2",
+    "XDG_SESSION_DESKTOP": "ubuntu",
+    "GSM_SKIP_SSH_AGENT_WORKAROUND": "true",
+    "QTWEBENGINE_DICTIONARIES_PATH": "/usr/share/hunspell-bdic/",
+    "GNOME_DESKTOP_SESSION_ID": "this-is-deprecated",
+    "LC_TIME": "ka_GE.UTF-8",
+    "DEBUGINFOD_URLS": "https://debuginfod.ubuntu.com ",
+    "LOGNAME": "luka",
+    "GNOME_TERMINAL_SERVICE": ":1.120",
+    "LC_PAPER": "ka_GE.UTF-8",
+    "MEMORY_PRESSURE_WRITE": "c29tZSAyMDAwMDAgMjAwMDAwMAA=",
+    "XDG_DATA_DIRS": "/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop",
+    "GNOME_SHELL_SESSION_MODE": "ubuntu",
+    "XDG_RUNTIME_DIR": "/run/user/1000",
+    "XDG_SESSION_TYPE": "x11",
+    "PATH": "/home/luka/.local/bin:/home/luka/.nvm/versions/node/v20.19.1/bin:/home/luka/.cargo/bin:/home/luka/.config/pear/bin:/home/luka/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin",
+    "LC_TELEPHONE": "ka_GE.UTF-8",
+    "LC_MONETARY": "ka_GE.UTF-8",
+    "SHELL": "/usr/bin/zsh",
+    "VTE_VERSION": "7600",
+    "USERNAME": "luka",
+    "GNOME_KEYRING_CONTROL": "/run/user/1000/keyring",
+    "QT_ACCESSIBILITY": "1",
+    "XAUTHORITY": "/run/user/1000/gdm/Xauthority",
+    "LC_NAME": "ka_GE.UTF-8",
+    "MEMORY_PRESSURE_WATCH": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/session.slice/org.gnome.SettingsDaemon.MediaKeys.service/memory.pressure",
+    "TERM": "xterm-256color",
+    "GDMSESSION": "ubuntu",
+    "DISPLAY": ":1",
+    "LC_ADDRESS": "ka_GE.UTF-8",
+    "SHLVL": "1",
+    "OLDPWD": "/home/luka",
+    "ZSH": "/home/luka/.oh-my-zsh",
+    "PAGER": "less",
+    "LESS": "-R",
+    "LSCOLORS": "Gxfxcxdxbxegedabagacad",
+    "LS_COLORS": "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:",
+    "NVM_DIR": "/home/luka/.nvm",
+    "NVM_CD_FLAGS": "-q",
+    "NVM_BIN": "/home/luka/.nvm/versions/node/v20.19.1/bin",
+    "NVM_INC": "/home/luka/.nvm/versions/node/v20.19.1/include/node",
+    "_": "/home/luka/.config/pear/bin/pear",
+    "NODE_ENV": "production"
+  },
+  "options": {
+    "name": "qmesh-worker",
+    "type": "terminal",
+    "stage": [
+      "index.js",
+      "src/**/*",
+      "bin/**/*",
+      "examples/**/*",
+      "package.json",
+      "README.md",
+      "PHASE2_COMPLETE.md"
+    ],
+    "links": {
+      "blocks": []
+    }
+  },
+  "checkpoint": null,
+  "flags": {
+    "dev": false,
+    "d": false,
+    "devtools": false,
+    "updatesDiff": false,
+    "updates": true,
+    "tmpStore": false,
+    "t": false,
+    "chromeWebrtcInternals": false,
+    "unsafeClearAppStorage": false,
+    "detached": false,
+    "ask": true,
+    "trusted": false,
+    "detach": false,
+    "sandbox": false,
+    "run": false,
+    "help": false,
+    "h": false
+  },
+  "dev": false,
+  "tier": "production",
+  "storage": "/home/luka/.config/pear/app-storage/by-random/eb73c1435ee5a0e92129beec4fccec5e",
+  "name": "qmesh-worker",
+  "main": "index.js",
+  "dependencies": {
+    "@inquirer/prompts": "^7.0.1",
+    "b4a": "^1.6.0",
+    "bare-fs": "^2.0.0",
+    "bare-node-runtime": "^1.1.4",
+    "bare-os": "^2.0.0",
+    "bare-path": "^2.0.0",
+    "bare-process": "^2.0.0",
+    "hyperswarm": "^4.0.0",
+    "node-llama-cpp": "^3.1.1"
+  },
+  "args": [],
+  "channel": "main",
+  "release": 5900,
+  "applink": "pear://4dfwqfqmm7absua31rez3mq3whhpg4zkfhkf7qruyms8hrbhhejo",
+  "fragment": null,
+  "link": "pear://4dfwqfqmm7absua31rez3mq3whhpg4zkfhkf7qruyms8hrbhhejo",
+  "linkData": "",
+  "entrypoint": null,
+  "dir": "/home/luka",
+  "dht": {
+    "nodes": [
+      {
+        "host": "85.228.137.127",
+        "port": 35630
+      },
+      {
+        "host": "188.166.28.20",
+        "port": 54773
+      },
+      {
+        "host": "34.154.38.202",
+        "port": 49739
+      },
+      {
+        "host": "195.231.61.20",
+        "port": 43229
+      },
+      {
+        "host": "88.99.3.86",
+        "port": 34479
+      },
+      {
+        "host": "142.93.90.113",
+        "port": 49737
+      },
+      {
+        "host": "88.99.3.86",
+        "port": 49737
+      },
+      {
+        "host": "34.154.38.202",
+        "port": 27320
+      },
+      {
+        "host": "128.199.8.184",
+        "port": 55937
+      },
+      {
+        "host": "167.86.111.230",
+        "port": 49738
+      },
+      {
+        "host": "157.180.68.166",
+        "port": 49740
+      },
+      {
+        "host": "34.118.34.135",
+        "port": 27343
+      },
+      {
+        "host": "188.166.28.20",
+        "port": 43881
+      },
+      {
+        "host": "34.154.38.202",
+        "port": 27325
+      },
+      {
+        "host": "88.99.3.86",
+        "port": 39894
+      },
+      {
+        "host": "34.154.38.202",
+        "port": 27322
+      },
+      {
+        "host": "84.247.175.242",
+        "port": 49737
+      },
+      {
+        "host": "161.97.106.8",
+        "port": 49737
+      },
+      {
+        "host": "150.136.237.154",
+        "port": 56496
+      },
+      {
+        "host": "88.99.3.86",
+        "port": 37143
+      },
+      {
+        "host": "34.41.86.179",
+        "port": 27343
+      },
+      {
+        "host": "34.41.86.179",
+        "port": 50101
+      },
+      {
+        "host": "65.108.235.140",
+        "port": 35783
+      },
+      {
+        "host": "138.68.147.8",
+        "port": 41282
+      },
+      {
+        "host": "150.136.237.154",
+        "port": 43843
+      },
+      {
+        "host": "5.9.30.70",
+        "port": 49737
+      },
+      {
+        "host": "176.9.42.203",
+        "port": 49739
+      },
+      {
+        "host": "161.97.107.51",
+        "port": 49737
+      },
+      {
+        "host": "161.97.106.8",
+        "port": 49740
+      },
+      {
+        "host": "161.97.106.8",
+        "port": 34111
+      },
+      {
+        "host": "57.129.86.6",
+        "port": 49737
+      },
+      {
+        "host": "65.108.235.140",
+        "port": 58190
+      },
+      {
+        "host": "150.136.237.154",
+        "port": 55491
+      },
+      {
+        "host": "107.189.29.131",
+        "port": 49739
+      },
+      {
+        "host": "150.136.237.154",
+        "port": 49738
+      },
+      {
+        "host": "152.53.128.189",
+        "port": 49741
+      },
+      {
+        "host": "134.199.158.64",
+        "port": 49741
+      },
+      {
+        "host": "161.97.69.105",
+        "port": 55373
+      },
+      {
+        "host": "138.68.147.8",
+        "port": 50406
+      },
+      {
+        "host": "150.136.237.154",
+        "port": 55356
+      },
+      {
+        "host": "34.41.86.179",
+        "port": 27319
+      },
+      {
+        "host": "34.41.86.179",
+        "port": 27325
+      },
+      {
+        "host": "213.209.143.23",
+        "port": 49737
+      },
+      {
+        "host": "167.86.69.32",
+        "port": 49738
+      },
+      {
+        "host": "162.55.3.89",
+        "port": 49738
+      },
+      {
+        "host": "161.97.106.8",
+        "port": 49739
+      },
+      {
+        "host": "161.97.69.105",
+        "port": 49740
+      },
+      {
+        "host": "34.41.86.179",
+        "port": 27331
+      },
+      {
+        "host": "65.21.230.76",
+        "port": 49737
+      },
+      {
+        "host": "154.12.245.227",
+        "port": 49740
+      },
+      {
+        "host": "157.180.12.214",
+        "port": 49737
+      },
+      {
+        "host": "8.134.52.88",
+        "port": 49738
+      },
+      {
+        "host": "136.243.5.20",
+        "port": 33753
+      },
+      {
+        "host": "88.99.3.86",
+        "port": 46480
+      },
+      {
+        "host": "143.198.58.3",
+        "port": 49010
+      },
+      {
+        "host": "128.199.8.184",
+        "port": 55702
+      },
+      {
+        "host": "34.41.86.179",
+        "port": 27320
+      },
+      {
+        "host": "150.136.237.154",
+        "port": 50673
+      },
+      {
+        "host": "161.97.106.8",
+        "port": 57679
+      },
+      {
+        "host": "85.228.137.127",
+        "port": 49737
+      },
+      {
+        "host": "34.118.34.135",
+        "port": 27335
+      },
+      {
+        "host": "217.65.145.233",
+        "port": 49737
+      },
+      {
+        "host": "116.202.214.143",
+        "port": 10001
+      },
+      {
+        "host": "167.235.4.108",
+        "port": 49738
+      },
+      {
+        "host": "88.99.3.86",
+        "port": 49430
+      },
+      {
+        "host": "34.154.38.202",
+        "port": 27321
+      },
+      {
+        "host": "209.38.232.36",
+        "port": 49740
+      },
+      {
+        "host": "167.86.115.237",
+        "port": 49740
+      },
+      {
+        "host": "209.38.232.36",
+        "port": 49738
+      },
+      {
+        "host": "116.202.214.149",
+        "port": 10001
+      },
+      {
+        "host": "88.99.3.86",
+        "port": 56702
+      },
+      {
+        "host": "195.231.61.20",
+        "port": 49737
+      },
+      {
+        "host": "157.90.213.229",
+        "port": 49738
+      },
+      {
+        "host": "167.86.115.237",
+        "port": 49738
+      },
+      {
+        "host": "34.154.38.202",
+        "port": 7900
+      },
+      {
+        "host": "138.68.147.8",
+        "port": 55448
+      },
+      {
+        "host": "138.68.147.8",
+        "port": 60357
+      },
+      {
+        "host": "158.220.127.169",
+        "port": 49738
+      },
+      {
+        "host": "188.166.28.20",
+        "port": 49737
+      },
+      {
+        "host": "34.41.86.179",
+        "port": 50100
+      },
+      {
+        "host": "34.41.86.179",
+        "port": 27341
+      },
+      {
+        "host": "34.41.86.179",
+        "port": 27321
+      },
+      {
+        "host": "136.243.5.20",
+        "port": 56861
+      },
+      {
+        "host": "188.166.28.20",
+        "port": 33570
+      },
+      {
+        "host": "70.71.188.118",
+        "port": 49737
+      },
+      {
+        "host": "88.99.3.86",
+        "port": 48684
+      },
+      {
+        "host": "95.111.248.57",
+        "port": 49739
+      },
+      {
+        "host": "150.136.237.154",
+        "port": 51056
+      },
+      {
+        "host": "128.199.8.184",
+        "port": 44506
+      },
+      {
+        "host": "150.136.237.154",
+        "port": 49740
+      },
+      {
+        "host": "161.97.69.105",
+        "port": 49739
+      },
+      {
+        "host": "51.195.150.125",
+        "port": 49737
+      },
+      {
+        "host": "188.166.28.20",
+        "port": 38912
+      },
+      {
+        "host": "88.99.3.86",
+        "port": 47156
+      },
+      {
+        "host": "161.97.106.8",
+        "port": 40208
+      },
+      {
+        "host": "34.41.86.179",
+        "port": 49739
+      }
+    ]
+  },
+  "pearDir": "/home/luka/.config/pear",
+  "length": 5900,
+  "fork": 0
+}
+DEBUG process.cwd(): /home/luka
+DEBUG import.meta.url: pear://4dfwqfqmm7absua31rez3mq3whhpg4zkfhkf7qruyms8hrbhhejo/src/lib/binary-resolver.js
+
+:x: Worker failed: llama-server binary not found for platform linux-x64.
+Expected location: /home/luka/bin/linux-x64/llama-server
+Base path: /home/luka
+Please ensure the binary is bundled in bin/linux-x64/
+
+Stack trace:
+Error: llama-server binary not found for platform linux-x64.
+Expected location: /home/luka/bin/linux-x64/llama-server
+Base path: /home/luka
+Please ensure the binary is bundled in bin/linux-x64/
+    at getBinaryPath (pear://4dfwqfqmm7absua31rez3mq3whhpg4zkfhkf7qruyms8hrbhhejo/src/lib/binary-resolver.js:101:13)
+    at main (pear://4dfwqfqmm7absua31rez3mq3whhpg4zkfhkf7qruyms8hrbhhejo/index.js:38:24)
+    at pear://4dfwqfqmm7absua31rez3mq3whhpg4zkfhkf7qruyms8hrbhhejo/index.js:132:1
+    at Module._run (file:///home/luka/.config/pear/by-dkey/7216eeac5c879a2ca1dcff14bb8c1ad47d188a8c17b13e66f36d354ea8bd3b28/0/boot.bundle/node_modules/bare-module/index.js:234:13)
+    at Module._evaluate (file:///home/luka/.config/pear/by-dkey/7216eeac5c879a2ca1dcff14bb8c1ad47d188a8c17b13e66f36d354ea8bd3b28/0/boot.bundle/node_modules/bare-module/index.js:221:12)
+    at Module._transform (file:///home/luka/.config/pear/by-dkey/7216eeac5c879a2ca1dcff14bb8c1ad47d188a8c17b13e66f36d354ea8bd3b28/0/boot.bundle/node_modules/bare-module/index.js:121:12)
+    at Module.load (file:///home/luka/.config/pear/by-dkey/7216eeac5c879a2ca1dcff14bb8c1ad47d188a8c17b13e66f36d354ea8bd3b28/0/boot.bundle/node_modules/bare-module/index.js:485:21)
+    at file:///home/luka/.config/pear/by-dkey/7216eeac5c879a2ca1dcff14bb8c1ad47d188a8c17b13e66f36d354ea8bd3b28/0/boot.bundle/run.js:132:14
+    at Timer._run (bare:/bare.js:2555:14)
+    at onimmediate (bare:/bare.js:2782:26)
+➜  ~ 
