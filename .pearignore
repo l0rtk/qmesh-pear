@@ -1,0 +1,45 @@
+# Pear Staging Ignore File
+# Files and directories to exclude from Pear staging
+
+# Models (large files, should be downloaded on demand)
+models/
+*.gguf
+
+# Development files
+.git/
+.gitignore
+node_modules/
+
+# Test files
+test-*.js
+test-*.sh
+*-test.js
+*.test.js
+
+# Documentation (keeping only essential docs)
+docs/
+DAY1_SUMMARY.md
+P2P_TEST_RESULTS.md
+STATUS.md
+ARCHITECTURE.md
+PHASE3_PROGRESS.md
+
+# Build artifacts
+build/
+dist/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+tmp/
+temp/
+*.tmp
