@@ -1,0 +1,21 @@
+#!/bin/bash
+# Quick test: Worker + Client in separate terminals
+
+echo "📋 QMesh Quick Test Guide"
+echo "========================"
+echo ""
+echo "You'll need 2 terminal windows:"
+echo ""
+echo "Terminal 1 (Worker):"
+echo "  cd /home/luka/qmesh/qmesh-pear"
+echo "  pear run --dev examples/p2p/run-p2p-worker.js"
+echo ""
+echo "Terminal 2 (Client - wait 10 seconds for worker to start):"
+echo "  cd /home/luka/qmesh/qmesh-pear"
+echo "  pear run --dev examples/p2p/run-p2p-client.js"
+echo ""
+echo "Expected result:"
+echo "  ✅ Worker discovers and starts"
+echo "  ✅ Client discovers worker"
+echo "  ✅ 3 inference requests complete"
+echo ""
