@@ -1,0 +1,39 @@
+# Dependencies
+# node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Package locks (optional)
+package-lock.json
+yarn.lock
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Storage and databases
+task-queue-db/
+storage/
+worker-storage/
+worker2-storage/
+*.db
+qmesh-scores/
+worker-id.txt
+
+# Logs
+*.log
+worker.log
+customer.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# NPM registry config (contains PAT_TOKEN)
+.npmrc
+
+# Documentation
+CLAUDE.md
+QVAC_DOC
