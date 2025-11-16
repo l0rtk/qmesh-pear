@@ -2,6 +2,22 @@
 
 **Peer-to-peer AI inference** powered by [Pear Runtime](https://docs.pears.com) and [llama.cpp](https://github.com/ggerganov/llama.cpp)
 
+## What is QMesh?
+
+QMesh is a **decentralized AI inference marketplace** that connects people who want to run AI models with people who have spare computing power. Think "Uber for AI" - instead of calling centralized APIs (OpenAI, Anthropic), you discover and use compute from a peer-to-peer network.
+
+**The Problem:**
+- Centralized APIs control access and pricing
+- Privacy concerns: your data goes through third-party servers
+- Expensive: $0.002-0.06 per 1K tokens adds up quickly
+- Millions of idle GPUs/CPUs sitting unused worldwide
+
+**The Solution:**
+- **Workers** earn credits/payments by running AI models on their hardware
+- **Clients** get cheaper, private AI inference from distributed workers
+- **No middleman** - peer-to-peer discovery via Hyperswarm DHT
+- **100% local processing** - complete privacy, no data leaves worker machines
+
 ## Become a Worker
 
 To become a worker, you need to install Pear and run:
@@ -10,7 +26,12 @@ To become a worker, you need to install Pear and run:
 pear run pear://4amnw4kw5pwnwqsk6wrj343f1dfs1o71u6qdja3xytxiisx3ofjo
 ```
 
-**First time?** Install Pear Runtime: https://docs.pears.com/install
+**First time?** Install Pear Runtime:
+```bash
+npm install -g pear
+```
+
+More details: https://docs.pears.com/guides/getting-started
 
 ## Features
 
