@@ -19,6 +19,8 @@
 import os from '#os'
 import path from '#path'
 import fs from '#fs'
+import { extractBinary } from './binary-extractor.js'
+import { downloadBinary } from './llama-binary-downloader.js'
 
 /**
  * Detect current platform
@@ -52,29 +54,78 @@ export function detectPlatform() {
 /**
  * Get bundled binary path for current platform
  *
- * @param {string} [basePath] - Base path (default: current directory)
- * @returns {string} - Absolute path to llama-server binary
+ * @param {string} [basePath] - Base path (default: auto-detect from Pear.config.storage or cwd)
+ * @returns {Promise<string>} - Absolute path to llama-server binary
  * @throws {Error} - If binary not found or platform not supported
  */
-export function getBinaryPath(basePath = '.') {
+export async function getBinaryPath(basePath = null) {
   const platform = detectPlatform()
 
-  // Map platform to binary directory
-  const binaryPaths = {
-    'linux-x64': path.join(basePath, 'bin', 'linux-x64', 'llama-server'),
-    'darwin-arm64': path.join(basePath, 'bin', 'darwin-arm64', 'llama-server'),
-    'darwin-x64': path.join(basePath, 'bin', 'darwin-x64', 'llama-server'),
-    'win32-x64': path.join(basePath, 'bin', 'win32-x64', 'llama-server.exe')
-  }
-
-  const binaryPath = binaryPaths[platform]
-
-  if (!binaryPath) {
+  // Validate platform support
+  const supportedPlatforms = ['linux-x64', 'darwin-arm64', 'darwin-x64', 'win32-x64']
+  if (!supportedPlatforms.includes(platform)) {
     throw new Error(
       `Unsupported platform: ${platform}. ` +
-      `Supported platforms: ${Object.keys(binaryPaths).join(', ')}`
+      `Supported platforms: ${supportedPlatforms.join(', ')}`
     )
   }
+
+  // Binary name varies by platform
+  const binaryName = platform === 'win32-x64' ? 'llama-server.exe' : 'llama-server'
+
+  // Auto-detect base path
+  if (!basePath) {
+    if (typeof Pear !== 'undefined' && Pear.config) {
+      // Running in Pear Runtime - use storage directory
+      basePath = Pear.config.storage
+      console.log('📦 Running in Pear Runtime')
+      console.log(`   Storage: ${basePath}`)
+
+      // Check if binary already extracted
+      const binaryPath = path.join(basePath, 'bin', binaryName)
+
+      try {
+        const stats = fs.statSync(binaryPath)
+        if (stats.isFile() && stats.size > 1000000) {
+          console.log(`   ✓ Binary already extracted: ${binaryPath}`)
+          return path.resolve(binaryPath)
+        }
+      } catch (error) {
+        // Binary not found, need to extract
+      }
+
+      // Try to extract binaries from Pear app bundle to storage
+      console.log('   📥 Extracting binaries from app bundle...')
+      try {
+        const extractedPath = await extractBinary(basePath, import.meta.url)
+        console.log(`   ✓ Extraction complete: ${extractedPath}`)
+        return path.resolve(extractedPath)
+      } catch (error) {
+        console.log(`   ⚠️  Extraction failed: ${error.message}`)
+        console.log('   📥 Attempting binary download instead...')
+
+        // Fallback: Download binaries if extraction fails
+        const targetDir = path.join(basePath, 'bin')
+        try {
+          const downloadedPath = await downloadBinary(targetDir)
+          return path.resolve(downloadedPath)
+        } catch (downloadError) {
+          throw new Error(
+            `Failed to obtain llama-server binary for platform ${platform}.\n` +
+            `Extraction error: ${error.message}\n` +
+            `Download error: ${downloadError.message}\n` +
+            `Storage path: ${basePath}`
+          )
+        }
+      }
+    } else {
+      // Dev mode - use current working directory
+      basePath = process.cwd()
+    }
+  }
+
+  // Dev mode: look for binary in bundled location
+  const binaryPath = path.join(basePath, 'bin', platform, binaryName)
 
   // Check if binary exists
   try {
@@ -87,7 +138,8 @@ export function getBinaryPath(basePath = '.') {
       throw new Error(
         `llama-server binary not found for platform ${platform}.\n` +
         `Expected location: ${binaryPath}\n` +
-        `Please ensure the binary is bundled correctly.`
+        `Base path: ${basePath}\n` +
+        `Please ensure the binary is bundled in bin/${platform}/`
       )
     }
     throw error
@@ -101,11 +153,11 @@ export function getBinaryPath(basePath = '.') {
  * Check if bundled binary is available for current platform
  *
  * @param {string} [basePath] - Base path (default: current directory)
- * @returns {boolean} - True if binary is available
+ * @returns {Promise<boolean>} - True if binary is available
  */
-export function isBinaryAvailable(basePath = '.') {
+export async function isBinaryAvailable(basePath = '.') {
   try {
-    getBinaryPath(basePath)
+    await getBinaryPath(basePath)
     return true
   } catch (error) {
     return false
@@ -116,13 +168,13 @@ export function isBinaryAvailable(basePath = '.') {
  * Get binary info for debugging
  *
  * @param {string} [basePath] - Base path (default: current directory)
- * @returns {object} - Binary information
+ * @returns {Promise<object>} - Binary information
  */
-export function getBinaryInfo(basePath = '.') {
+export async function getBinaryInfo(basePath = '.') {
   const platform = detectPlatform()
 
   try {
-    const binaryPath = getBinaryPath(basePath)
+    const binaryPath = await getBinaryPath(basePath)
     const stats = fs.statSync(binaryPath)
 
     return {

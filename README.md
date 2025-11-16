@@ -1,36 +1,46 @@
 # QMesh - Distributed P2P LLM Inference Network
 
-🌐 **Peer-to-peer AI inference** powered by [Pear Runtime](https://docs.pears.com) and [llama.cpp](https://github.com/ggerganov/llama.cpp)
+**Peer-to-peer AI inference** powered by [Pear Runtime](https://docs.pears.com) and [llama.cpp](https://github.com/ggerganov/llama.cpp)
 
-## ✨ Features
+## Become a Worker
 
-- 🍐 **Zero-infrastructure deployment** - Distribute via Pear DHT, no servers required
-- 🌍 **Cross-platform** - Runs on Linux, macOS (Intel & Apple Silicon), Windows
-- 🤖 **Local LLM inference** - Privacy-first AI using llama.cpp sidecar
-- 📡 **P2P networking** - Hyperswarm for worker discovery and NAT traversal
-- ⚖️ **Health-based routing** - Workers self-regulate based on CPU/memory/queue load
-- 🚀 **Production-ready** - Phase 3 complete with bundled cross-platform binaries
+To become a worker, you need to install Pear and run:
 
-## 🎯 Project Status
+```bash
+pear run pear://4amnw4kw5pwnwqsk6wrj343f1dfs1o71u6qdja3xytxiisx3ofjo
+```
 
-**Phase 3: Production Deployment** - ✅ Complete
+**First time?** Install Pear Runtime: https://docs.pears.com/install
+
+## Features
+
+- **Zero-infrastructure deployment** - Distribute via Pear DHT, no servers required
+- **Cross-platform** - Runs on Linux, macOS (Intel & Apple Silicon), Windows
+- **Local LLM inference** - Privacy-first AI using llama.cpp sidecar
+- **P2P networking** - Hyperswarm for worker discovery and NAT traversal
+- **Health-based routing** - Workers self-regulate based on CPU/memory/queue load
+- **Production-ready** - Phase 3 complete with bundled cross-platform binaries
+
+## Project Status
+
+**Phase 3: Production Deployment** - Complete
 
 | Phase | Status | Description |
 |-------|--------|-------------|
-| Phase 1 | ✅ Complete | Core inference engine (llama.cpp sidecar) |
-| Phase 2 | ✅ Complete | P2P networking (Hyperswarm) |
-| **Phase 3** | **✅ Complete** | **Cross-platform binaries & deployment** |
-| Phase 4 | 📋 Planned | Priority queues & credit system |
-| Phase 5 | 📋 Planned | Blockchain payments (Solana) |
+| Phase 1 | Complete | Core inference engine (llama.cpp sidecar) |
+| Phase 2 | Complete | P2P networking (Hyperswarm) |
+| **Phase 3** | **Complete** | **Cross-platform binaries & deployment** |
+| Phase 4 | Planned | Priority queues & credit system |
+| Phase 5 | Planned | Blockchain payments (Solana) |
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Run QMesh Worker
 
 #### From Pear DHT (Global Distribution)
 
 ```bash
-pear run pear://4dfwqfqmm7absua31rez3mq3whhpg4zkfhkf7qruyms8hrbhhejo
+pear run pear://4amnw4kw5pwnwqsk6wrj343f1dfs1o71u6qdja3xytxiisx3ofjo
 ```
 
 #### From Source (Development)
@@ -60,16 +70,16 @@ pear run --dev .
 node examples/basic-client.js
 ```
 
-## 🖥️ Platform Support
+## Platform Support
 
 QMesh runs natively on all major desktop platforms:
 
 | Platform | Architecture | Status | Binary Size | GPU Support |
 |----------|-------------|--------|-------------|-------------|
-| **Linux** | x86-64 | ✅ Tested | 4.9 MB + 21 libs | CPU only* |
-| **macOS** | ARM64 (M1/M2/M3) | ✅ Bundled | 4.8 MB + 24 libs | Metal |
-| **macOS** | x86-64 (Intel) | ✅ Bundled | 4.9 MB + 21 libs | CPU only |
-| **Windows** | x86-64 | ✅ Bundled | 5.7 MB + 15 DLLs | CPU only* |
+| **Linux** | x86-64 | Tested | 4.9 MB + 21 libs | CPU only* |
+| **macOS** | ARM64 (M1/M2/M3) | Bundled | 4.8 MB + 24 libs | Metal |
+| **macOS** | x86-64 (Intel) | Bundled | 4.9 MB + 21 libs | CPU only |
+| **Windows** | x86-64 | Bundled | 5.7 MB + 15 DLLs | CPU only* |
 
 *GPU-accelerated binaries (CUDA/ROCm) planned for Phase 4
 
@@ -77,7 +87,7 @@ QMesh runs natively on all major desktop platforms:
 
 See [CROSS_PLATFORM_SUPPORT.md](./CROSS_PLATFORM_SUPPORT.md) for detailed platform info.
 
-## 📦 Deployment
+## Deployment
 
 ### Quick Deploy
 
@@ -106,7 +116,7 @@ pear seed main
 pear release main
 ```
 
-## 🏗️ Architecture
+## Architecture
 
 ### Sidecar Design
 
@@ -131,10 +141,10 @@ QMesh uses **llama.cpp** as a sidecar process for maximum compatibility:
 ```
 
 **Why Sidecar?**
-- ✅ Bare runtime can't load native N-API modules (node-llama-cpp)
-- ✅ llama.cpp is battle-tested and optimized
-- ✅ Cross-platform binaries available from official releases
-- ✅ GPU acceleration support (Metal, CUDA, ROCm)
+- Bare runtime can't load native N-API modules (node-llama-cpp)
+- llama.cpp is battle-tested and optimized
+- Cross-platform binaries available from official releases
+- GPU acceleration support (Metal, CUDA, ROCm)
 
 ### P2P Network Flow
 
@@ -155,7 +165,7 @@ Client
       └─ Broadcast health status
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 qmesh-pear/
@@ -203,7 +213,7 @@ qmesh-pear/
     └── PHASE3_PROGRESS.md
 ```
 
-## 🧪 Development
+## Development
 
 ### Testing Inference
 
@@ -228,7 +238,7 @@ pear run --dev .
 node examples/basic-client.js
 ```
 
-## 📊 Performance
+## Performance
 
 **M1 MacBook Pro (8GB RAM):**
 - Model load: 3-5 seconds
@@ -244,7 +254,7 @@ node examples/basic-client.js
 
 *GPU-accelerated binaries coming in Phase 4
 
-## 🛠️ Configuration
+## Configuration
 
 Edit [`index.js`](./index.js) to configure worker settings:
 
@@ -269,7 +279,7 @@ const config = {
 }
 ```
 
-## 🔮 Roadmap
+## Roadmap
 
 ### Phase 4: Priority & Credits (Next)
 - Multi-tier priority queue (6 tiers: Master → Bronze)
@@ -290,36 +300,32 @@ const config = {
 - WebSocket support for web clients
 - Regional worker clustering
 
-## 📚 Documentation
+## Documentation
 
 - [Cross-Platform Support](./CROSS_PLATFORM_SUPPORT.md) - Platform details & binary info
 - [User Guide](./USER_GUIDE.md) - Step-by-step setup instructions
 - [Phase 3 Progress](./PHASE3_PROGRESS.md) - Implementation details
 - [CLAUDE.md](./CLAUDE.md) - AI assistant guidance
 
-## 🤝 Contributing
+## Contributing
 
 Contributions welcome! Please see [CLAUDE.md](./CLAUDE.md) for development guidelines.
 
-## 📄 License
+## License
 
 MIT
 
-## 🔗 Links
+## Links
 
 - **Pear Runtime:** https://docs.pears.com
 - **Hyperswarm:** https://github.com/holepunchto/hyperswarm
 - **llama.cpp:** https://github.com/ggerganov/llama.cpp
 - **Project Repo:** (your repo URL here)
 
-## 🎉 Acknowledgments
+## Acknowledgments
 
 Built with:
 - [Pear Runtime](https://pears.com) - P2P application platform
 - [llama.cpp](https://github.com/ggerganov/llama.cpp) - LLM inference engine
 - [Hyperswarm](https://github.com/holepunchto/hyperswarm) - DHT-based P2P networking
 - [Bare](https://github.com/holepunchto/bare) - Lightweight JavaScript runtime
-
----
-
-Made with 🍐 and ❤️

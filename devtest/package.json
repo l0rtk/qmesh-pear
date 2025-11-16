@@ -1,0 +1,30 @@
+{
+  "name": "qmesh",
+  "version": "1.0.0",
+  "description": "Decentralized LLM inference mesh network powered by QVAC and Pear",
+  "main": "main.js",
+  "type": "module",
+  "pear": {
+    "name": "qmesh",
+    "type": "terminal"
+  },
+  "dependencies": {
+    "@tetherto/qvac-sdk": "^0.1.0",
+    "hyperswarm": "^4.14.0",
+    "hyperbee": "^2.26.5",
+    "hypercore": "^11.16.1",
+    "b4a": "^1.7.1",
+    "node-fetch": "^3.3.2"
+  },
+  "scripts": {
+    "dev": "pear dev .",
+    "stage": "pear stage .",
+    "seed": "pear seed qmesh",
+    "test": "node scripts/test-idle.js"
+  },
+  "metadata": {
+    "author": "QMesh Team",
+    "homepage": "https://github.com/qmesh",
+    "repository": "https://github.com/qmesh/qmesh"
+  }
+}
